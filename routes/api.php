@@ -26,7 +26,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'jwt.verify'], function () {
 });
 
 // can be accessed by user or admin
-Route::group(['jwt.verify'], function () {
+Route::group(['middleware' => 'jwt.verify'], function () {
     Route::get('/quiz', [QuizController::class, 'index']);
 });
 
