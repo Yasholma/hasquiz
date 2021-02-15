@@ -50,7 +50,7 @@ return [
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'hasquiz'),
             'username' => env('DB_USERNAME', 'hashop'),
-            'password' => env('DB_PASSWORD', 'Hashop@6776'),
+            'password' => env('DB_PASSWORD', 'Hasop@6776'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
