@@ -16,8 +16,7 @@ class QuizController extends Controller
      */
     public function index()
     {
-        return 'QUiz';
-        // return QuizResource::collection(Quiz::all());
+        return QuizResource::collection(Quiz::all());
     }
 
     /**
