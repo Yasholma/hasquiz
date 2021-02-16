@@ -9,6 +9,7 @@ use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class QuestionController extends Controller
@@ -31,8 +32,6 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        $quizId = 1;
-
         $validator = Validator::make($request->all(), [
             'question' => 'required|string|min:3|max:250',
             'time' => 'required|numeric',
@@ -45,26 +44,31 @@ class QuestionController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
+        $quiz_id = 1;
         $question = new Question();
-        $question->quiz_id = $quizId;
-        $question->question = $request->question;
-        $question->time = $request->time;
 
-        $question->save();
+        DB::transaction(function () use ($request, $question, $quiz_id) {
 
-        foreach ($request->answers as $answer) {
-            Answer::create([
-                'question_id' => $question->id,
-                'answer' => $answer['answer'],
-                'correct' => $answer['correct']
-            ]);
-        }
+            $question->quiz_id = $quiz_id;
+            $question->question = $request->question;
+            $question->time = $request->time;
 
-        // update total time for this quiz
-        $quiz = Quiz::find($quizId);
-        $questions = $quiz->questions()->get()->toArray();
-        $quiz->total_time = $this->calculateTotalTime($questions);
-        $quiz->save();
+            $question->save();
+
+            foreach ($request->answers as $answer) {
+                Answer::create([
+                    'question_id' => $question->id,
+                    'answer' => $answer['answer'],
+                    'correct' => $answer['correct']
+                ]);
+            }
+
+            // update total time for this quiz
+            $quiz = Quiz::find($quiz_id);
+            $questions = $quiz->questions()->get()->toArray();
+            $quiz->total_time = $this->calculateTotalTime($questions);
+            $quiz->save();
+        });
 
         return response()->json([
             'message' => 'Question and answers created successfully',
