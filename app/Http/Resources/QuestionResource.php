@@ -16,7 +16,7 @@ class QuestionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'quiz_id' => $this->quiz_id,
+            'quizId' => $this->quiz_id,
             'question' => $this->question,
             'answers' => AnswerResource::collection($this->answers),
             'time' => $this->time

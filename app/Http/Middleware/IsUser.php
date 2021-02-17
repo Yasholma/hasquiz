@@ -19,7 +19,7 @@ class IsUser
     {
         $user = Auth::user();
         if ($user->role !== 'User') {
-            return response()->json(["Admin can't view this resource."], 401);
+            return response()->json(["Admin can not perform this operation."], 401);
         }
         return $next($request);
     }

@@ -30,9 +30,9 @@ class UserAnswerController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'userAnswers.*.question_id' => 'required|numeric',
-            'userAnswers.*.selected_answer' => 'required|numeric',
-            'quiz_id' => 'numeric',
+            'userAnswers.*.questionId' => 'required|numeric',
+            'userAnswers.*.selectedAnswer' => 'required|numeric',
+            'quizId' => 'numeric',
         ]);
 
         if ($validator->fails()) {
@@ -40,7 +40,7 @@ class UserAnswerController extends Controller
         }
 
         $user = Auth::user();
-        $quiz_id = $request->quiz_id;
+        $quiz_id = $request->quizId;
         $userAnswers = $request->userAnswers;
 
         $total_questions = Quiz::find($quiz_id)->questions->count();
@@ -49,8 +49,8 @@ class UserAnswerController extends Controller
         $correct = 0;
 
         foreach ($userAnswers as $userAnswer) {
-            $q_id = $userAnswer['question_id'];
-            $selected_answer_id = $userAnswer['selected_answer'];
+            $q_id = $userAnswer['questionId'];
+            $selected_answer_id = $userAnswer['selectedAnswer'];
 
             $question = Question::find($q_id);
             $correct_answers = $question->answers->where('correct')->toArray();
@@ -71,9 +71,9 @@ class UserAnswerController extends Controller
         }
 
         $meta = [
-            'total_answered' => $total_answered,
-            'correct_count' => $correct,
-            'total_questions' => $total_questions,
+            'totalAnswered' => $total_answered,
+            'correctCount' => $correct,
+            'totalQuestions' => $total_questions,
             'user' => $user
         ];
 

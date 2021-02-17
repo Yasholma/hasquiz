@@ -19,10 +19,10 @@ class QuizResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'questions' => QuestionResource::collection($this->questions),
-            'total_time' => intval($this->total_time),
-            'total_questions' => $this->questions->count(),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'totalTime' => intval($this->total_time),
+            'totalQuestions' => $this->questions->count(),
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
         ];
     }
 }

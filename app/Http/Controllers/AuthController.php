@@ -39,8 +39,8 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|min:3|max:30',
-            'last_name' => 'required|string|min:3|max:30',
+            'firstName' => 'required|string|min:3|max:30',
+            'lastName' => 'required|string|min:3|max:30',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:6|max:30|confirmed',
             'password_confirmation' => 'required|string'
@@ -51,8 +51,8 @@ class AuthController extends Controller
         }
 
         $user = new User();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
+        $user->first_name = $request->firstName;
+        $user->last_name = $request->lastName;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->role = 'User';
@@ -106,9 +106,9 @@ class AuthController extends Controller
     {
         return response()->json([
             "data" => [
-                'access_token' => $token,
-                'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 60,
+                'accessToken' => $token,
+                'tokenType' => 'bearer',
+                'expiresIn' => auth()->factory()->getTTL() * 60,
                 'user' => auth()->user()
             ]
         ]);
