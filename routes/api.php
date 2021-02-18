@@ -18,13 +18,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-// authentication routes
-Route::group(['prefix' => 'auth', 'middleware' => 'jwt.verify'], function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);
-});
-
 // can be accessed by user or admin
 Route::group(['middleware' => 'jwt.verify'], function () {
     Route::get('/quiz', [QuizController::class, 'index']);
