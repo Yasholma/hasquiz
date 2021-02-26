@@ -18,6 +18,7 @@ class QuizSeeder extends Seeder
         DB::table('quizzes')->insert([
             'title' => 'Software Development',
             'description' => 'This is a software development quiz.',
+            'total_time' => 95,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);

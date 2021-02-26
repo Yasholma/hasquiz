@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\QuestionResource;
-use App\Http\Resources\QuizResource;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Quiz;
@@ -44,11 +43,16 @@ class QuestionController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
+        // check to see if at least one correct answer has been sent
+        $answers = $request->answers;
+        if (!$this->checkIfOnlyOneCorrectAnswerIsProvider($answers)) {
+            return response()->json(['error' => 'Only one correct answer should be provided.'], 400);
+        }
+
         $quiz_id = 1;
         $question = new Question();
 
         DB::transaction(function () use ($request, $question, $quiz_id) {
-
             $question->quiz_id = $quiz_id;
             $question->question = $request->question;
             $question->time = $request->time;
@@ -76,32 +80,26 @@ class QuestionController extends Controller
         ], 201);
     }
 
+    // check if only one correct answer is provided
+    private function checkIfOnlyOneCorrectAnswerIsProvider($answers): string
+    {
+        $correctCount = 0;
+        foreach ($answers as $answer) {
+            if ($answer['correct']) {
+                $correctCount += 1;
+            }
+        }
+
+        if ($correctCount > 1 || $correctCount === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function calculateTotalTime($questions): int
     {
         return collect(Arr::pluck($questions, 'time'))->sum();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Question  $question
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Question $question)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Question  $question
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Question $question)
-    {
-        //
     }
 
     /**
